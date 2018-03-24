@@ -17,3 +17,14 @@ class Expense(models.Model):
     def __str__(self):
         return self.title
 
+class Note(models.Model):
+    expense = models.ForeignKey('Expense', on_delete=models.CASCADE)
+    note = models.TextField(max_length=200, blank=False)
+    date = models.DateTimeField(
+            default=timezone.now)
+
+    def create(self):
+        self.save()
+
+    def __str__(self):
+        return self.note

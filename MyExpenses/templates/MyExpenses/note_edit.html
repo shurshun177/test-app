@@ -5,13 +5,12 @@
     <title>Title</title>
 </head>
 <body>
-<h1>New Expense</h1>
+<h1>Add Note</h1>
 <div class="content container">
-    <form method="POST" class="expense-form">{% csrf_token %}
+    <form method="POST" class="note-form">{% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="save btn btn-default">Save</button>
     </form>
 </div>
-{#<a href="{% url 'note_new' %}" class="top-menu">Add Note</a>#}
 </body>
 </html>

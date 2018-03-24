@@ -1,10 +1,10 @@
 from django.shortcuts import render
-from django.views.generic.edit import DeleteView, UpdateView
+from django.views.generic.edit import DeleteView
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
 from django.utils import timezone
-from .models import Expense
-from .forms import ExpenseForm
+from .models import Expense, Note
+from .forms import ExpenseForm, NoteForm
 from django.shortcuts import render, get_object_or_404
 
 # Create your views here.
@@ -45,3 +45,15 @@ def expense_edit(request, pk):
     else:
         form = ExpenseForm(instance=expense)
     return render(request, 'MyExpenses/expense_edit.html', {'form': form})
+
+def note_new(request):
+    if request.method == "POST":
+        form = NoteForm(request.POST)
+        if form.is_valid():
+            note = form.save(commit=False)
+            note.date = timezone.now()
+            note.save()
+            return redirect('expense_list')
+    else:
+        form = ExpenseForm()
+    return render(request, 'MyExpenses/note_edit.html', {'form': form})

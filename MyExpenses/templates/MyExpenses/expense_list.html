@@ -17,6 +17,8 @@
     <th scope="col">Description</th>
     <th scope="col">Sum</th>
     <th scope="col">Date</th>
+<th></th>
+<th></th>
 </thead>
 <tbody>
     {% for expense in expenses %}
@@ -25,9 +27,21 @@
             <td>{{ expense.description }}</td>
             <td>{{ expense.sum }}</td>
             <td>{{ expense.date }}</td>
+            <td>
+                <a href="{% url 'expense_edit' pk=expense.pk %}">Edit Expense</a>
+            </td>
+            <td>
+                <form action="{% url 'expense_delete' expense.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="submit" value="Delete" />
+                </form>
+            </td>
         </tr>
     {% endfor %}
 </tbody>
 </table>
+<div>
+<a href="{% url 'expense_new' %}" class="top-menu">Add Expense</a>
+</div>
 </body>
 </html>

@@ -1,19 +1,48 @@
 class Version(models.Model):
     version_number = models.IntegerField(unique=True, verbose_name='Version_No')
     version_name = models.CharField(max_length=72, verbose_name='Version_Name')
-    version_type = models.CharField(max_length=64, choices=, verbose_name='Version_Type')
-    hospital_type = models.CharField(max_length=72, choices=, verbose_name='Hospital_Type')
-    active = models.BooleanField(verbose_name='Active')
-    business_subject = models.ManyToManyField('BusinessSubject', choices=)
-    creation_at = models.DateTimeField(verbose_name='Date of creation')
+    HOSPITAL_TYPE = (
+        (1, 'כללים'),
+        (2, 'גריאטריים'),
+        (3, 'פסיכיאטריים')
+    )
+    version_type = models.CharField(max_length=1, choices=HOSPITAL_TYPE,
+                                    verbose_name='Version_Type')
+    hospital_type = models.CharField(max_length=1, choices=HOSPITAL_TYPE,
+                                     verbose_name='Hospital_Type')
+    ACTIVE_STATUS = (
+        (1, 'פעיל'),
+        (2, 'לא פעיל')
+    )
+    active = models.CharField(max_length=1, choices=ACTIVE_STATUS,
+                              verbose_name='Active')
+    business_subject = models.ManyToManyField('BusinessSubject')
+    created_at = models.DateTimeField(verbose_name='Created_At')
     updated_at = models.DateTimeField(verbose_name='Update_At')
-'''
+
 class BusinessSubject(models.Model):
+    BS_CODE = (
+        (1 ,'תקן איוש ונלוות'),
+        (2, 'פעילות'),
+        (3, 'חווית המטופל'),
+        (4, 'הון אנושי'),
+        (5, 'איכות ובטיחות'),
+        (6 ,'תשתית כלכלית ופזית'),
+        (7, 'ניצולת חדרי ניתוח'),
+        (8, 'תשתית טכנולוגית')
+    )
+    bs_code = models.CharField(max_length=1, choices=BS_CODE,)
     version = models.ManyToManyField('Version')
     measure = models.ManyToManyField('Measure')
-'''
+
 class Measure(models.Model):
-    measure_code = models.IntegerField(verbose_name='Measure_Code')
+    MEASURE_CODE = (
+        (1, 'ON TARGET'),
+        (2, 'LOW IS BETTER'),
+        (3, 'HIGH IS BETTER')
+    )
+    measure_code = models.IntegerField(choices=MEASURE_CODE,
+                                       verbose_name='Measure_Code')
     measure_name = models.CharField(max_length=64,
                                     verbose_name='Measure_Name')
     measure_desc = models.CharField(max_length=121,
@@ -26,17 +55,33 @@ class Measure(models.Model):
                                  verbose_name='Numerator')
     denominator = models.CharField(max_length=64,
                                    verbose_name='denominator')
-    hospital_type = models.CharField(max_length=64, choices=)
-    business_subject = models.ManyToManyField('BusinessSubject', choices=)
-    measure_type = models.CharField(max_length=64, choices=,
+    HOSPITAL_TYPE = (
+        (1, 'כללים'),
+        (2, 'גריאטריים'),
+        (3, 'פסיכיאטריים')
+    )
+    hospital_type = models.CharField(max_length=1, choices=HOSPITAL_TYPE)
+    business_subject = models.ManyToManyField('BusinessSubject')
+    
+    measure_type = models.CharField(max_length=64, choices=MEASURE_CODE,
                                     verbose_name='Measure_Type')
-    measuring_frequency = models.CharField(max_length=64,choices=,
+    FREQUENCY = (
+        (1, 'יומי'),
+        (2, 'חודשי'),
+        (3, 'רבעוני'),
+        (4, 'חציוני'),
+        (5, 'שנתי')
+    )
+    measuring_frequency = models.CharField(max_length=64,choices=FREQUENCY,
                                            verbose_name='Measuring_Frequency')
     unit_measure = models.TextField(max_length=200, verbose_name='Unit_Measure')
     digit_num = models.IntegerField(verbose_name='Num_Of_Digits')
-    separate_thousands = models.CharField(max_length=2, choices=,
-                                          verbose_name='Separate_Thousands')
-    active = models.CharField(max_length=8,choices=,
+    separate_thousands = models.BooleanField(max_length=1, verbose_name='Separate_Thousands')
+    ACTIVE_STATUS = (
+        (1, 'פעיל'),
+        (2, 'לא פעיל')
+    )
+    active = models.CharField(max_length=1, choices=ACTIVE_STATUS,
                               verbose_name='Active')
     from_date = models.DateTimeField(verbose_name='From_Date')
     to_date = models.DateTimeField(verbose_name='To_Date')
